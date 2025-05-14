@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compare Responses</title>
+    <base href="/">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"
+        integrity="sha512-<paste the SRI hash if you’d like>"
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="https://cdn.glitch.global/08eadef3-cfe8-4477-be51-7a895f69f25e/form-builder-favicon.png?v=1715549924923" type="image/png">
+    <style>
+        /* Styles specific to comparator page */
+        .table-container {
+            overflow-x: auto; /* Allow horizontal scrolling */
+            max-width: 100%;
+            margin-top: 1.5rem;
+            margin-bottom: 2rem; /* Space between sections */
+        }
+        .comparison-table { /* Class for both tables */
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem; /* text-sm */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background-color: white;
+            min-width: 1000px; /* Increased minimum width for new columns */
+        }
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #e5e7eb; /* Gray-200 */
+            padding: 0.75rem; /* p-3 */
+            text-align: left;
+            vertical-align: top; /* Align content to top */
+        }
+        .comparison-table th {
+            background-color: #f3f4f6; /* Gray-100 */
+            font-weight: 600; /* font-semibold */
+            position: sticky; /* Make header sticky */
+            top: 0; /* Stick to top */
+            z-index: 1;
+        }
+        .comparison-table tbody tr:nth-child(even) {
+            background-color: #f9fafb; /* Alternate row color */
+        }
+        .comparison-table tbody tr:hover {
+            background-color: #f0f4f8; /* Hover effect */
+        }
+
+         /* Specific column widths for Raw Responses Table (adjust as needed) */
+        #raw-responses-table th:nth-child(1), #raw-responses-table td:nth-child(1) { min-width: 150px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; } /* Candidate Name */
+        #raw-responses-table th:nth-child(2), #raw-responses-table td:nth-child(2) { min-width: 120px; } /* Submitted At */
+         /* Question columns will take remaining width */
+
+
+         /* Specific column widths for AI Comparison Table (adjust as needed) */
+        #ai-comparison-table th:nth-child(1), #ai-comparison-table td:nth-child(1) { min-width: 150px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; } /* Candidate Name */
+        #ai-comparison-table th:nth-child(2), #ai-comparison-table td:nth-child(2) { min-width: 120px; } /* Submitted At */
+        #ai-comparison-table th:nth-child(3), #ai-comparison-table td:nth-child(3) { min-width: 180px; } /* Parameter Scores */
+        #ai-comparison-table th:nth-child(4), #ai-comparison-table td:nth-child(4) { min-width: 80px; text-align: center; } /* AI Fit Score */
+        #ai-comparison-table th:nth-child(5), #ai-comparison-table td:nth-child(5) { min-width: 100px; text-align: center; } /* Confidence Level */
+        #ai-comparison-table th:nth-child(6), #ai-comparison-table td:nth-child(6) { min-width: 200px; } /* Strength Highlights */
+        #ai-comparison-table th:nth-child(7), #ai-comparison-table td:nth-child(7) { min-width: 200px; } /* Weakness Highlights */
+        #ai-comparison-table th:nth-child(8), #ai-comparison-table td:nth-child(8) { min-width: 100px; text-align: center; } /* Recommendation */
+        #ai-comparison-table th:last-child, #ai-comparison-table td:last-child { min-width: 120px; text-align: center; } /* Action */
+
+
+         /* Style for loading/error messages */
+        .status-message {
+             text-align: center;
+             padding: 2rem;
+             font-style: italic;
+             color: #6b7280; /* Gray-500 */
+        }
+        .status-message.error {
+            color: #dc2626; /* Red-600 */
+            font-weight: 500;
+        }
+
+        /* AI Analysis Modal */
+        #ai-summary-modal .modal-content {
+            max-width: 700px; /* Adjust max width for summary */
+        }
+         #ai-summary-modal .analysis-content h6 {
+             font-size: 1rem; /* Heading size for sub-sections */
+             font-weight: 600;
+             color: #374151; /* Slate-700 */
+             margin-bottom: 0.5rem;
+             display: flex;
+             align-items: center;
+         }
+         #ai-summary-modal .analysis-content h6 i {
+             margin-right: 0.5rem;
+             font-size: 1.1rem;
+         }
+
+         #ai-summary-modal .analysis-content p,
+         #ai-summary-modal .analysis-content ul {
+             font-size: 0.95rem; /* Slightly smaller text for lists/paragraphs */
+             color: #4b5563; /* Gray-600 */
+             margin-bottom: 1rem;
+             line-height: 1.6;
+         }
+
+         #ai-summary-modal .analysis-content ul {
+             padding-left: 1.5rem; /* Indent lists */
+         }
+
+         #ai-summary-modal .analysis-content ul li {
+             margin-bottom: 0.4rem;
+         }
+
+         /* Red Flags Box */
+         #ai-summary-modal .analysis-content .red-flags-box {
+             padding: 0.75rem;
+             margin-bottom: 1.5rem;
+             border-radius: 0.375rem;
+             border: 1px solid #f87171; /* Red-400 */
+             background-color: #fee2e2; /* Red-100 */
+             color: #b91c1c; /* Red-700 */
+         }
+         #ai-summary-modal .analysis-content .red-flags-box h6 {
+              color: #b91c1c; /* Red-700 */
+         }
+
+         /* Recommendation Box (Traffic Light Colors) */
+         #ai-summary-modal .analysis-content .recommendation-box {
+             padding: 0.75rem;
+             margin-bottom: 1.5rem;
+             text-align: center;
+             font-weight: bold;
+             font-size: 1.1rem; /* Increased font size */
+             border-radius: 0.375rem;
+             border: 1px solid transparent; /* Default border */
+         }
+
+         #ai-summary-modal .analysis-content .recommendation-box.fit {
+             background-color: #d1fae5; /* Green-100 */
+             color: #065f46; /* Green-700 */
+             border-color: #34d399; /* Green-400 */
+         }
+
+         #ai-summary-modal .analysis-content .recommendation-box.maybe {
+             background-color: #fffbeb; /* Yellow-100 */
+             color: #b45309; /* Yellow-700 */
+             border-color: #fcd34d; /* Yellow-400 */
+         }
+
+         #ai-summary-modal .analysis-content .recommendation-box.not-fit {
+             background-color: #fee2e2; /* Red-100 */
+             color: #b91c1c; /* Red-700 */
+             border-color: #f87171; /* Red-400 */
+         }
+         #ai-summary-modal .error-message {
+             color: #ef4444; /* Red-500 */
+             font-size: 0.875rem;
+             margin-top: 0.5rem;
+         }
+
+         /* Styles for formatted AI Comparison Output */
+        .ai-comparison-summary-item {
+            background-color: #f8fafc; /* Light light blue */
+            border: 1px solid #e2e8f0; /* Light blue border */
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+         .ai-comparison-summary-item h4 {
+             font-size: 1rem;
+             font-weight: 600;
+             color: #1e293b; /* Slate-800 */
+             margin-bottom: 0.5rem;
+             display: flex;
+             align-items: center;
+         }
+         .ai-comparison-summary-item h4 i {
+             margin-right: 0.75rem;
+             font-size: 1.25rem;
+         }
+         .ai-comparison-summary-item p {
+             font-size: 0.9rem;
+             color: #475569; /* Slate-600 */
+             margin-bottom: 0.5rem;
+         }
+         .ai-comparison-summary-item .scores-list {
+             list-style: disc;
+             padding-left: 1.25rem;
+             margin-top: 0.5rem;
+         }
+         .ai-comparison-summary-item .scores-list li {
+             margin-bottom: 0.25rem;
+         }
+         .ai-comparison-summary-item .recommendation {
+             font-weight: bold;
+             margin-top: 0.75rem;
+             padding-top: 0.75rem;
+             border-top: 1px dashed #cbd5e1; /* Slate-300 */
+         }
+         .ai-comparison-summary-item .recommendation.fit { color: #065f46; } /* Green-700 */
+         .ai-comparison-summary-item .recommendation.maybe { color: #b45309; } /* Yellow-700 */
+         .ai-comparison-summary-item .recommendation.not-fit { color: #b91c1c; } /* Red-700 */
+
+        /* Chart Container Styles */
+        .chart-container {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .chart-container h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e293b; /* Slate-800 */
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+        }
+         .chart-container svg {
+             display: block; /* Prevent extra space below SVG */
+             margin: 0 auto; /* Center the chart */
+         }
+
+
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <header class="bg-white shadow-sm py-4 sticky top-0 z-20">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <a href="/" class="text-2xl font-bold text-indigo-600 hover:text-indigo-700 transition-colors">
+                <i class="fas fa-clipboard-list mr-2"></i>YourFormBuilder - Comparator
+            </a>
+            <nav class="flex space-x-4">
+                 <a href="#" id="back-to-results-link" class="text-gray-600 hover:text-indigo-600 transition duration-300 text-sm font-medium"><i class="fas fa-arrow-left mr-1"></i>Back to Results</a>
+                <a href="/" class="text-gray-600 hover:text-indigo-600 transition duration-300 text-sm font-medium"><i class="fas fa-plus-circle mr-1"></i>Create New Form</a>
+                <a href="dashboard.html" class="text-gray-600 hover:text-indigo-600 transition duration-300 text-sm font-medium"><i class="fas fa-tachometer-alt mr-1"></i>Dashboard</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <h1 id="comparator-form-title" class="text-2xl md:text-3xl font-bold text-gray-800 mb-6">Comparing Responses for: Loading...</h1>
+
+        <div class="ai-analysis-controls bg-white p-4 rounded-lg shadow mb-6">
+            <h2 class="text-xl font-semibold text-gray-700 mb-3"><i class="fas fa-robot mr-2"></i>AI Comparison Analysis</h2>
+            <label for="ai-comparator-instructions" class="block text-sm font-bold text-gray-700 mb-2">
+                Instructions for AI Comparison Analysis:
+            </label>
+            <textarea id="ai-comparator-instructions" rows="3" class="form-textarea w-full text-sm mb-3" placeholder="e.g., 'Prioritize candidates with strong project management experience mentioned in Q3 and Q5.', 'Identify candidates who seem like the best cultural fit based on Q8.'"></textarea>
+            <button id="analyze-with-ai-btn" class="action-button bg-indigo-500 hover:bg-indigo-600 text-white text-sm py-2 px-4">
+                <i class="fas fa-paper-plane mr-2"></i>Analyze with AI
+            </button>
+             <p id="ai-comparison-error-message" class="text-red-500 text-xs mt-2 hidden"></p>
+        </div>
+
+        <div id="ai-comparison-results-section" class="hidden">
+            <div class="flex justify-between items-center mb-3">
+                 <h2 class="text-xl font-semibold text-gray-700">AI Evaluation Table</h2>
+                 <button id="export-ai-csv-btn" class="action-button bg-green-500 hover:bg-green-600 text-white text-sm py-2 px-4">
+                     <i class="fas fa-file-csv mr-2"></i>Export Table CSV
+                 </button>
+            </div>
+
+            <div id="ai-comparison-table-container" class="table-container">
+                 <div id="ai-table-status" class="status-message hidden">
+                     </div>
+                <table id="ai-comparison-table" class="comparison-table">
+                    <thead>
+                        <tr id="ai-table-header-row">
+                            </tr>
+                    </thead>
+                    <tbody id="ai-table-body">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+
+         <div id="ai-comparison-output" class="mt-6 pt-4 border-t border-gray-200 hidden">
+             <h3 class="text-lg font-semibold mb-4 text-indigo-700">Overall AI Comparison Summary:</h3>
+             <div id="ai-comparison-result-content" class="text-sm">
+                 <p class="text-gray-500 italic">AI comparison analysis will appear here...</p>
+             </div>
+
+             <div id="charts-container" class="mt-8 space-y-8">
+                 <div id="recommendation-pie-chart" class="chart-container hidden">
+                     <h3>Recommendation Distribution</h3>
+                     <svg></svg>
+                 </div>
+                 <div id="parameter-horizontal-bar-chart" class="chart-container hidden">
+                      <h3>Average Parameter Scores Across Candidates</h3>
+                     <svg></svg>
+                 </div>
+                  <div id="candidate-stacked-bar-chart" class="chart-container hidden">
+                     <h3>Parameter Score Distribution per Candidate</h3>
+                     <svg></svg>
+                 </div>
+                  <div id="parameter-diverging-bar-chart" class="chart-container hidden">
+                     <h3>Parameter Performance Relative to Average</h3>
+                     <svg></svg>
+                 </div>
+             </div>
+
+         </div>
+
+
+         <h2 class="text-xl font-semibold text-gray-700 mb-3 mt-8">Raw Candidate Responses</h2>
+        <div id="raw-responses-table-container" class="table-container">
+             <div class="flex justify-end items-center mb-3">
+                <button id="export-raw-csv-btn" class="action-button bg-gray-500 hover:bg-gray-600 text-white text-sm py-2 px-4">
+                     <i class="fas fa-file-csv mr-2"></i>Export Raw CSV
+                 </button>
+             </div>
+             <div id="raw-table-status" class="status-message">
+                 <i class="fas fa-spinner fa-spin mr-2"></i>Loading raw data...
+             </div>
+            <table id="raw-responses-table" class="comparison-table hidden">
+                <thead>
+                    <tr id="raw-table-header-row">
+                        </tr>
+                </thead>
+                <tbody id="raw-table-body">
+                    </tbody>
+            </table>
+        </div>
+
+
+    </main>
+
+    <footer class="bg-gray-800 text-white py-6 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-xs text-gray-500">&copy; <span id="current-year-comparator"></span> YourFormBuilder. All rights reserved.</p>
+        </div>
+    </footer>
+
+     <div id="ai-summary-modal" class="modal-overlay hidden">
+         <div class="modal-content">
+             <button class="modal-close-button" id="close-summary-modal-btn" aria-label="Close modal">&times;</button>
+             <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">AI Summary for <span id="summary-candidate-name" class="text-indigo-600"></span></h3>
+             <div id="ai-summary-content" class="ai-analysis-result mt-4 pt-4 border-t border-dashed border-gray-300">
+                 <div class="analysis-content">
+                     <p class="text-gray-500 italic text-center">Loading AI summary...</p>
+                 </div>
+                 <p class="error-message text-red-500 text-xs mt-2 hidden"></p>
+             </div>
+         </div>
+     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js" integrity="sha512-MCI5P+ie3OhM6ytbC+m+qiQxX7J+tVFGQ/K+K/ik+q+wOQv+6/yV+k+V+i+g+w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="comparator.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set footer year
+            const yearSpan = document.getElementById('current-year-comparator');
+            if (yearSpan) yearSpan.textContent = new Date().getFullYear();
+
+            // Set back button link (optional, needs formId)
+            const urlParams = new URLSearchParams(window.location.search);
+            const formId = urlParams.get('formId');
+            const backLink = document.getElementById('back-to-results-link');
+            if(backLink && formId) {
+                backLink.href = `/results.html?formId=${formId}`;
+            } else if(backLink) {
+                backLink.href = '/dashboard.html'; // Fallback if no formId
+            }
+
+             // Add event listener for closing the summary modal
+            const summaryModalEl = document.getElementById('ai-summary-modal');
+            const closeSummaryModalBtn = document.getElementById('close-summary-modal-btn');
+            if (closeSummaryModalBtn && summaryModalEl) {
+                closeSummaryModalBtn.addEventListener('click', () => {
+                    summaryModalEl.classList.add('hidden');
+                    document.body.classList.remove('body-blur');
+                });
+                summaryModalEl.addEventListener('click', (e) => {
+                    if (e.target === summaryModalEl) {
+                        summaryModalEl.classList.add('hidden');
+                         document.body.classList.remove('body-blur');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

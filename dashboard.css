@@ -1,0 +1,156 @@
+/* dashboard.css */
+body {
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    color: #374151; /* Default: Slate-700 */
+    background-color: #f3f4f6; /* Lighter gray for background */
+    overflow: hidden; /* Prevent scrolling on body */
+}
+
+/* Sidebar Styles */
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem; /* py-3 px-4 */
+    border-radius: 0.375rem; /* rounded-md */
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #d1d5db; /* Gray-400 */
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    text-decoration: none;
+}
+.sidebar-link:hover {
+    background-color: #374151; /* Gray-700 */
+    color: #ffffff; /* White */
+}
+.sidebar-link.active {
+    background-color: #4f46e5; /* Indigo-600 */
+    color: #ffffff; /* White */
+    font-weight: 600;
+}
+.sidebar-link i {
+    width: 1.25rem; /* Ensure icons align */
+    text-align: center;
+}
+
+/* Main Content Area */
+main {
+    background-color: #f9fafb; /* Slightly different gray for main content */
+}
+
+/* General Action Button (used on My Forms page) */
+.action-button {
+    padding: 0.65rem 1.25rem;
+    font-size: 0.9rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out, box-shadow 0.2s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    text-decoration: none; /* Ensure links look like buttons */
+}
+.action-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+.action-button:active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Styling for individual form items in the list */
+.form-list-item {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0.5rem;
+    border-bottom: 1px solid #e5e7eb; /* Gray-200 */
+    transition: background-color 0.2s ease-in-out;
+}
+.form-list-item:last-child {
+    border-bottom: none;
+}
+.form-list-item:hover {
+    background-color: #f3f4f6; /* Gray-100 */
+}
+
+.form-list-item .form-title {
+    font-weight: 500;
+    color: #1f2937; /* Gray-800 */
+    flex-grow: 1;
+    margin-right: 1rem;
+    margin-bottom: 0.5rem; /* Add margin for wrap */
+    word-break: break-word; /* Prevent long titles from breaking layout */
+}
+
+.form-list-item .form-actions {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0; /* Prevent actions from shrinking */
+    margin-left: auto; /* Push actions to the right */
+}
+
+.form-list-item .form-actions a,
+.form-list-item .form-actions button {
+    display: inline-flex; /* Use flex for icon alignment */
+    align-items: center;
+    justify-content: center;
+    margin-left: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.375rem; /* rounded-md */
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-align: center;
+    transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    border: none; /* Remove default button border */
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+.form-list-item .form-actions a:hover,
+.form-list-item .form-actions button:hover {
+     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+
+.form-list-item .form-actions .view-responses-link {
+    background-color: #3b82f6; /* Blue-500 */
+    color: white;
+}
+.form-list-item .form-actions .view-responses-link:hover {
+    background-color: #2563eb; /* Blue-600 */
+}
+
+.form-list-item .form-actions .open-form-link {
+    background-color: #10b981; /* Green-500 */
+    color: white;
+}
+.form-list-item .form-actions .open-form-link:hover {
+    background-color: #059669; /* Green-600 */
+}
+
+.form-list-item .form-actions .copy-link-btn {
+     background-color: #8b5cf6; /* Violet-500 */
+     color: white;
+}
+.form-list-item .form-actions .copy-link-btn:hover {
+     background-color: #7c3aed; /* Violet-600 */
+}
+
+.copy-feedback-inline {
+    font-size: 0.75rem;
+    margin-left: 0.5rem;
+    display: inline-block;
+}
+
+/* Content Section Visibility */
+.content-section {
+    /* Default is visible, JS will add hidden */
+}
+
+.hidden {
+    display: none !important;
+}

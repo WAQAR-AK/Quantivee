@@ -1,0 +1,32 @@
+{
+  "name": "my-form-builder-app",
+  "version": "1.0.0",
+  "description": "A web application for building and managing forms with AI-powered question generation.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "dotenv": "^16.5.0",
+    "node-fetch": "2.x",
+    "d3": "^7.9.0",
+    "d3-selection": "^3.0.0",
+    "d3-shape": "^3.2.0",
+    "d3-color": "^3.1.0",
+    "d3-interpolate": "^3.0.1"
+  },
+  "engines": {
+    "node": "16.x"
+  },
+  "keywords": [
+    "forms",
+    "survey",
+    "ai",
+    "firebase",
+    "express"
+  ],
+  "author": "",
+  "license": "ISC"
+}

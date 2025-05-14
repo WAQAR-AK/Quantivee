@@ -1,0 +1,670 @@
+/* Basic body and font styles */
+body {
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    color: #374151; /* Default: Slate-700 */
+    background-color: #f9fafb; /* Default: Gray-50 */
+    scroll-behavior: smooth;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+main { /* Assuming your main content is wrapped in <main> or similar */
+    flex-grow: 1;
+}
+
+/* Class to apply when a modal is open to blur the background */
+.body-blur > *:not(.modal-overlay):not(script):not(style) {
+    filter: blur(4px);
+    transition: filter 0.3s ease-out;
+    pointer-events: none; /* Prevent interaction with blurred elements */
+}
+
+/* Header styling */
+header {
+    padding-top: 1rem; /* py-4 */
+    padding-bottom: 1rem;
+}
+
+/* Hero Section */
+.hero-bg {
+    padding-top: 7rem; /* Increased to avoid overlap with taller fixed header */
+    padding-bottom: 4rem;
+}
+@media (max-width: 768px) {
+    .hero-bg {
+        padding-top: 6rem;
+    }
+}
+
+/* General Section Padding */
+section {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+}
+#form-section { /* Specific padding for form section */
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+
+
+/* Form Input Styling */
+.form-input, .form-textarea, .form-select {
+    width: 100%;
+    padding: 0.75rem 1rem; /* py-3 px-4 */
+    border: 1px solid #d1d5db; /* border-gray-300 */
+    border-radius: 0.375rem; /* rounded-md */
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    font-size: 0.95rem;
+}
+.form-input:focus, .form-textarea:focus, .form-select:focus {
+    border-color: #4f46e5; /* focus:border-indigo-500 */
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3); /* focus:ring-indigo-500 focus:ring-opacity-50 (custom) */
+    outline: none;
+}
+.form-textarea {
+    min-height: 80px;
+}
+
+
+/* Custom styles for potential dropdowns */
+.dropdown:hover .dropdown-menu { display: block; }
+.dropdown-menu { display: none; border-radius: 0.375rem; }
+
+/* Style for the form container */
+.form-container {
+    background-color: white;
+    padding: 2rem 2.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    max-width: 800px; /* Slightly reduced from 900px for better balance */
+    margin: 2rem auto;
+    border: 1px solid #e5e7eb;
+}
+@media (max-width: 768px) {
+    .form-container { padding: 1.5rem; max-width: 100%; }
+}
+
+/* General Action Button Styles */
+.action-button {
+    padding: 0.65rem 1.25rem;
+    font-size: 0.95rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out, box-shadow 0.2s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.action-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+.action-button:active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+.action-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+
+/* AI Action Buttons (Select Parameters, Generate AI Questions) */
+.ai-action-btn {
+    background-color: #4f46e5; /* Indigo-600 */
+    color: white;
+    padding: 0.6rem 1.1rem; /* Slightly adjusted */
+    font-size: 0.875rem;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out, box-shadow 0.2s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+}
+.ai-action-btn:hover {
+    background-color: #4338ca; /* Indigo-700 */
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Styles for Modals (Parameter, Preview, Auth) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(17, 24, 39, 0.6); /* Gray-900 with opacity */
+    backdrop-filter: blur(3px);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    overflow-y: auto;
+}
+
+.modal-content { /* For Parameter and Preview Modals */
+    background-color: white;
+    padding: 1.75rem 2rem; /* Increased padding slightly */
+    border-radius: 0.75rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    width: 100%;
+    max-width: 600px; /* Max width for parameter modal */
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.auth-modal-content { /* For Login/Signup */
+    background-color: white;
+    padding: 2rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    width: 100%;
+    max-width: 420px; /* Portrait orientation */
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+#preview-modal .modal-content { max-width: 750px; }
+
+.modal-close-button {
+    position: absolute;
+    top: 0.75rem;
+    right: 1rem;
+    font-size: 1.75rem;
+    font-weight: 300;
+    color: #9ca3af; /* Gray-400 */
+    background-color: transparent;
+    border: none;
+    padding: 0.25rem 0.5rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: color 0.2s ease-in-out;
+}
+.modal-close-button:hover { color: #ef4444; /* Red-500 */ }
+
+/* Parameter Modal Item Styling */
+.parameter-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 0.25rem; /* Adjusted padding */
+    border-bottom: 1px solid #f3f4f6; /* Light border */
+}
+.parameter-item:last-child { border-bottom: none; }
+
+.parameter-item label {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    margin-right: 1rem;
+    font-size: 0.9rem;
+    color: #374151;
+}
+.parameter-item .parameter-name-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.parameter-item input[type="number"].parameter-percentage {
+    width: 55px;
+    padding: 0.35rem 0.25rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.25rem;
+    text-align: center;
+    font-size: 0.9rem;
+    transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+.parameter-item input[type="number"].parameter-percentage:disabled {
+    color: #6b7280;
+    background-color: #f3f4f6; /* Gray-100 for disabled */
+    cursor: not-allowed;
+}
+.parameter-item input[type="number"].parameter-percentage:not(:disabled) {
+    background-color: #fff;
+}
+.parameter-item input[type="number"].parameter-percentage:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.3);
+    outline: none;
+}
+
+#custom-parameter-list { display: flex; flex-direction: column; }
+
+.hidden { display: none !important; }
+
+/* Styles for form preview elements */
+.preview-question {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+    position: relative;
+}
+.preview-question:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.preview-question label.question-title {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #1f2937;
+}
+.preview-question input[type="text"],
+.preview-question textarea,
+.preview-question input[type="number"],
+.preview-question input[type="email"],
+.preview-question input[type="date"] {
+    width: 100%;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    background-color: #f3f4f6;
+    color: #4b5563;
+}
+.preview-question .options label {
+    font-weight: normal;
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+    color: #374151;
+}
+.preview-question .options input[type="radio"],
+.preview-question .options input[type="checkbox"] {
+    margin-right: 0.5rem;
+    accent-color: #4f46e5;
+}
+
+/* Styles for the editable question blocks in the editor */
+.editable-question {
+    background-color: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    position: relative;
+}
+.editable-question .question-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+.editable-question .question-header input[type="text"].question-text-input {
+    flex-grow: 1;
+    margin-right: 0.75rem;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    min-width: 200px;
+}
+.editable-question .question-header select.question-type-select {
+    padding: 0.65rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    background-color: white;
+    margin-right: 0.75rem;
+}
+.editable-question .question-actions {
+    display: flex;
+    align-items: center;
+}
+.editable-question .question-actions button {
+    background: transparent;
+    border: none;
+    padding: 0.25rem 0.4rem; /* Slightly more padding */
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-size: 0.9rem; /* Adjusted size */
+    line-height: 1;
+    transition: color 0.2s, background-color 0.2s;
+}
+.editable-question .question-actions button:hover {
+    background-color: #f3f4f6; /* Light gray hover for action buttons */
+}
+.editable-question .question-actions .delete-btn { color: #ef4444; }
+.editable-question .question-actions .delete-btn:hover { color: #dc2626; background-color: #fee2e2; } /* Red hover */
+.editable-question .question-actions .move-question-up-btn,
+.editable-question .question-actions .move-question-down-btn {
+    color: #6b7280; /* Gray-500 */
+}
+.editable-question .question-actions .move-question-up-btn:hover,
+.editable-question .question-actions .move-question-down-btn:hover {
+    color: #3b82f6; /* Blue-500 */
+    background-color: #eff6ff; /* Blue-50 */
+}
+
+
+@media (max-width: 640px) {
+    .editable-question .question-header input[type="text"].question-text-input,
+    .editable-question .question-header select.question-type-select {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 0.5rem;
+    }
+    .editable-question .question-header .question-actions { margin-left: auto; }
+}
+
+.editable-question .options-area { margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid #f3f4f6; }
+.editable-question .option-item { display: flex; align-items: center; margin-bottom: 0.5rem; }
+.editable-question .option-item input[type="text"] {
+    flex-grow: 1;
+    margin-right: 0.5rem;
+    padding: 0.5rem 0.6rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+}
+.editable-question .option-item .delete-option-btn {
+    color: #ef4444;
+    background: transparent;
+    border: none;
+    padding: 0.1rem 0.3rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+    transition: color 0.2s;
+}
+.editable-question .option-item .delete-option-btn:hover { color: #dc2626; }
+.editable-question .add-option-btn {
+    background-color: #3b82f6;
+    color: white;
+    padding: 0.35rem 0.75rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    border: none;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    transition: background-color 0.2s;
+}
+.editable-question .add-option-btn:hover { background-color: #2563eb; }
+
+/* Styles for AI suggested questions */
+.ai-suggested-question {
+    background-color: #eef2ff; /* Indigo-50 */
+    border: 1px solid #c7d2fe; /* Indigo-200 */
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: box-shadow 0.2s ease-in-out;
+}
+.ai-suggested-question:hover { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04); }
+.ai-suggested-question .question-content { flex-grow: 1; }
+.ai-suggested-question .question-text {
+    font-weight: 500;
+    color: #1e293b; /* Slate-800 */
+    font-size: 1rem; /* Slightly smaller than before, but still prominent */
+    margin-bottom: 0.25rem;
+}
+.ai-suggested-question .question-type-label {
+     font-size: 0.8rem;
+     color: #4338ca; /* Indigo-700 */
+     margin-bottom: 0.3rem;
+     font-weight: 500;
+}
+.ai-suggested-question .options-preview { font-size: 0.8rem; color: #475569; padding-left: 0.5rem; }
+.ai-suggested-question .options-preview li { margin-bottom: 0.1rem; }
+.ai-suggested-question .action-buttons { display: flex; flex-direction: row; gap: 0.5rem; align-items: center; margin-left: auto; }
+.ai-suggested-question .action-buttons button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    border-radius: 0.375rem;
+    transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    font-weight: 500;
+    border: 1px solid transparent;
+    cursor: pointer;
+}
+.ai-suggested-question .action-buttons button:hover { box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.07); }
+.ai-suggested-question .action-buttons .accept-btn { background-color: #10b981; color: white; border-color: #059669; }
+.ai-suggested-question .action-buttons .accept-btn:hover { background-color: #059669; }
+.ai-suggested-question .action-buttons .reject-btn { background-color: #ef4444; color: white; border-color: #dc2626; }
+.ai-suggested-question .action-buttons .reject-btn:hover { background-color: #dc2626; }
+
+/* Improved Checkbox Styling */
+input[type="checkbox"].form-checkbox {
+    appearance: none; -webkit-appearance: none; -moz-appearance: none;
+    display: inline-block;
+    height: 1.15rem; width: 1.15rem;
+    border: 2px solid #cbd5e1; /* Slate-300 */
+    border-radius: 0.25rem;
+    vertical-align: middle; position: relative; cursor: pointer;
+    background-color: #fff;
+    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+input[type="checkbox"].form-checkbox:checked { background-color: #4f46e5; border-color: #4f46e5; }
+input[type="checkbox"].form-checkbox:checked::after {
+    content: ''; display: block; position: absolute;
+    top: 45%; left: 50%;
+    width: 0.3rem; height: 0.6rem;
+    border: solid white; border-width: 0 2px 2px 0;
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+input[type="checkbox"].form-checkbox:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.4);
+    border-color: #6366f1;
+}
+
+.required-asterisk { color: #ef4444; margin-left: 0.25rem; font-weight: bold; }
+
+@media (max-width: 480px) {
+    .ai-suggested-question { flex-direction: column; align-items: flex-start; }
+    .ai-suggested-question .action-buttons { margin-left: 0; margin-top: 0.5rem; width: 100%; justify-content: flex-start; }
+    .ai-suggested-question .action-buttons button { flex-grow: 1; text-align: center; }
+}
+
+/* Results Page Specific Styles */
+.results-container {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    max-width: 900px;
+    margin: 2rem auto;
+    border: 1px solid #e5e7eb;
+}
+.response-item {
+    border: 1px solid #e5e7eb; /* Lighter border */
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    background-color: #f9fafb; /* Light gray background */
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* Subtle shadow */
+    font-size: 1rem; /* Increased base font size for response item */
+}
+.response-item h4.response-timestamp { /* More specific */
+    font-weight: 600; /* Semibold */
+    margin-bottom: 1rem; /* Increased spacing */
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 0.75rem;
+    color: #1f2937; /* Darker text */
+    font-size: 1rem; /* Adjusted size */
+}
+.response-item p.response-qa { /* More specific */
+    margin-bottom: 0.75rem;
+    font-size: 1rem; /* Adjusted size */
+    color: #374151;
+    line-height: 1.6; /* Slightly increased line height */
+}
+.response-item p.response-qa strong {
+    margin-right: 0.5rem;
+    color: #111827; /* Gray-900 */
+    font-weight: 500;
+}
+.response-item p.response-qa:last-child { margin-bottom: 0; }
+
+.ai-analysis-section {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px dashed #cbd5e1; /* Dashed border */
+}
+.ai-analysis-section h5 {
+    font-size: 1.1rem; /* Slightly larger */
+    font-weight: 600;
+    color: #4f46e5; /* Indigo */
+    margin-bottom: 0.75rem; /* Increased spacing */
+}
+.ai-analysis-section textarea {
+    min-height: 80px; /* Slightly increased */
+    font-size: 0.95rem; /* Match form inputs */
+}
+.ai-analysis-section .action-button {
+    font-size: 0.9rem; /* Slightly larger button text */
+    padding: 0.5rem 1rem; /* Adjusted padding */
+}
+
+
+/* Styles for AI Analysis Result section */
+.ai-analysis-result {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px dashed #cbd5e1; /* Dashed border */
+    font-size: 1rem; /* Base font size for analysis section */
+}
+
+.ai-analysis-result h5 {
+    font-size: 1.1rem; /* Slightly larger */
+    font-weight: 600;
+    color: #4f46e5; /* Indigo */
+    margin-bottom: 0.75rem; /* Increased spacing */
+}
+
+.ai-analysis-result .analysis-content h6 {
+    font-size: 1rem; /* Heading size for sub-sections */
+    font-weight: 600;
+    color: #374151; /* Slate-700 */
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+.ai-analysis-result .analysis-content h6 i {
+    margin-right: 0.5rem;
+    font-size: 1.1rem;
+}
+
+
+.ai-analysis-result .analysis-content p,
+.ai-analysis-result .analysis-content ul {
+    font-size: 0.95rem; /* Slightly smaller text for lists/paragraphs */
+    color: #4b5563; /* Gray-600 */
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.ai-analysis-result .analysis-content ul {
+    padding-left: 1.5rem; /* Indent lists */
+}
+
+.ai-analysis-result .analysis-content ul li {
+    margin-bottom: 0.4rem;
+}
+
+/* Red Flags Box */
+.ai-analysis-result .analysis-content .red-flags-box {
+    padding: 0.75rem;
+    margin-bottom: 1.5rem;
+    border-radius: 0.375rem;
+    border: 1px solid #f87171; /* Red-400 */
+    background-color: #fee2e2; /* Red-100 */
+    color: #b91c1c; /* Red-700 */
+}
+.ai-analysis-result .analysis-content .red-flags-box h6 {
+     color: #b91c1c; /* Red-700 */
+}
+
+/* Recommendation Box (Traffic Light Colors) */
+.ai-analysis-result .analysis-content .recommendation-box {
+    padding: 0.75rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.1rem; /* Increased font size */
+    border-radius: 0.375rem;
+    border: 1px solid transparent; /* Default border */
+}
+
+.ai-analysis-result .analysis-content .recommendation-box.fit {
+    background-color: #d1fae5; /* Green-100 */
+    color: #065f46; /* Green-700 */
+    border-color: #34d399; /* Green-400 */
+}
+
+.ai-analysis-result .analysis-content .recommendation-box.maybe {
+    background-color: #fffbeb; /* Yellow-100 */
+    color: #b45309; /* Yellow-700 */
+    border-color: #fcd34d; /* Yellow-400 */
+}
+
+.ai-analysis-result .analysis-content .recommendation-box.not-fit {
+    background-color: #fee2e2; /* Red-100 */
+    color: #b91c1c; /* Red-700 */
+    border-color: #f87171; /* Red-400 */
+}
+
+.ai-analysis-result .error-message {
+    color: #ef4444; /* Red-500 */
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
+
+
+/* Form Responder Page Specific Styles (form.html) */
+.form-responder-container {
+    background-color: white;
+    padding: 2.5rem; /* More padding */
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    max-width: 750px; /* Slightly wider form */
+    margin: 2rem auto;
+    border: 1px solid #e5e7eb;
+}
+.form-question { /* On form.html */
+    margin-bottom: 1.75rem;
+    padding-bottom: 1.75rem;
+    border-bottom: 1px solid #f3f4f6; /* Lighter border */
+}
+.form-question:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+.form-question label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: #1f2937;
+}
+.form-question input[type="text"],
+.form-question textarea,
+.form-question input[type="number"],
+.form-question input[type="email"],
+.form-question input[type="date"],
+.form-question input[type="file"] {
+    /* Uses .form-input class now */
+}
+.form-question .options label {
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    color: #374151;
+    cursor: pointer;
+}
+.form-question .options input[type="radio"],
+.form-question .options input[type="checkbox"] {
+    margin-right: 0.75rem;
+    transform: scale(1.1);
+    cursor: pointer;
+    accent-color: #4f46e5; /* Indigo */
+}
+#submit-form-btn:disabled { opacity: 0.6; cursor: not-allowed; }
